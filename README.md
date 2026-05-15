@@ -47,17 +47,17 @@ The custom Triton implementation is compared against the naive PyTorch implement
 ### Latency
 The naive implementation quickly hits the quadratic scaling wall, taking over 2 seconds (2159 ms) to process a 65k context window. The Triton implementation successfully manages memory bounds, handling the same 65k context in just ~364 ms.
 
-![MHA Latency](assets/latency.png)
+![MHA Latency](Custom%20Triton%20Implementation/assets/latency.png)
 
 ### Throughput (Tokens/s)
 Triton maintains a highly competitive throughput curve relative to the highly tuned PyTorch native attention, completely dominating the naive approach as sequence lengths scale.
 
-![MHA Throughput](assets/throughput.png)
+![MHA Throughput](Custom%20Triton%20Implementation/assets/throughput.png)
 
 ### Compute Utilization (TFLOPs/s)
 By V2, the Triton kernel achieves excellent hardware utilization, peaking at nearly 100 TFLOPs/s. It avoids the massive I/O overhead of the naive implementation, keeping the math units fed.
 
-![MHA TFLOPs/s](assets/TFLOPS.png)
+![MHA TFLOPs/s](Custom%20Triton%20Implementation/assets/TFLOPS.png)
 
 ### Raw Benchmark Data
 | N | D | H | torch_ms | naive_ms | triton_ms (V2) | torch_tflops | naive_tflops | triton_tflops (V2)|
