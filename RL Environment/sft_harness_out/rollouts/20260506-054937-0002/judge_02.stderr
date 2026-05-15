@@ -1,0 +1,52 @@
+/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/graph.py:825: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at ../aten/src/ATen/cuda/CublasHandlePool.cpp:135.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 35, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 1220, in full
+    shape = _shape_check_impl(shape)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 1201, in _shape_check_impl
+    raise TypeError(f"Shape element {i} must have type `constexpr`")
+TypeError: Shape element 0 must have type `constexpr`
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 432, in <module>
+    main()
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 281, in main
+    out_agent = FlashAttention.apply(q_agent, k_agent, v_agent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/sft_harness_out/rollouts/20260506-054937-0002/turn_02.py", line 240, in forward
+    flash_attention_forward_kernel[grid](
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 345, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 662, in run
+    kernel = self.compile(
+             ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 276, in compile
+    module = src.make_ir(options, codegen_fns, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 113, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 24:10:
+    Flash Attention v2 forward kernel.
+    Processes queries in blocks (Br), keys/values in blocks (Bc).
+    """
+    batch_id = tl.program_id(0)
+    head_id = tl.program_id(1)
+    block_m = tl.program_id(2)
+
+    # Compute block offsets
+    start_m = block_m * Br
+
+    # Initialize accumulators
+    m_i = tl.full((Br,), float("-inf"), dtype=tl.float32)
+          ^

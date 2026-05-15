@@ -1,0 +1,6 @@
+# Add any Python dependencies the model needs for solving tasks
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch
+triton
+pytest
+numpy

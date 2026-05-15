@@ -1,0 +1,49 @@
+[project]
+name = "pm_env"
+version = "0.1.0"
+description = "Let an LLM execute tasks in an environment."
+classifiers = ["Private :: Do not Upload"]
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp==2.13.3",
+    "litellm>=1.80.12",
+    "pydantic",
+    "psutil>=7.2.1",
+    "typer>=0.19.0",
+    "rich",
+    "numpy",
+    "torch",
+    "triton",
+    "pytest",
+    # For compatibility with huggingface's `datasets` package.
+    "fsspec<=2025.10.0",
+    "websockets>=14.0",
+    "loguru>=0.7.3",
+    "pymongo>=4.14.1",
+    "textual>=6.2.1",
+    "anthropic>=0.75.0",
+]
+
+[project.scripts]
+pm_env = "pm_env.entrypoints:app"
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu121" }]
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
+
+[build-system]
+requires = ["uv_build>=0.6.5"]
+build-backend = "uv_build"
+
+[tool.ruff.lint]
+select = [
+  "E4",
+  "E7",
+  "E9",
+  "F",
+  "UP",
+]

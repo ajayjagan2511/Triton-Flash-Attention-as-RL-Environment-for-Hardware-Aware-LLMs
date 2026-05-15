@@ -1,0 +1,67 @@
+/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/graph.py:825: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at ../aten/src/ATen/cuda/CublasHandlePool.cpp:135.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 35, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 1220, in full
+    shape = _shape_check_impl(shape)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 1201, in _shape_check_impl
+    raise TypeError(f"Shape element {i} must have type `constexpr`")
+TypeError: Shape element 1 must have type `constexpr`
+
+The above exception was the direct cause of the following exception:
+
+triton.compiler.errors.CompilationError: at 10:11:
+def zeros(shape, dtype):
+    """
+    Returns a tensor filled with the scalar value 0 for the given :code:`shape` and :code:`dtype`.
+
+    :param shape: Shape of the new array, e.g., (8, 16) or (8, )
+    :type shape: tuple of ints
+    :param dtype: Data-type of the new array, e.g., :code:`tl.float16`
+    :type dtype: DType
+    """
+    return core.full(shape, 0, dtype)
+           ^
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 432, in <module>
+    main()
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 281, in main
+    out_agent = FlashAttention.apply(q_agent, k_agent, v_agent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/sft_harness_out/rollouts/20260506-054738-0001/turn_02.py", line 231, in forward
+    flash_attention_forward_kernel[grid](
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 345, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 662, in run
+    kernel = self.compile(
+             ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 276, in compile
+    module = src.make_ir(options, codegen_fns, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 113, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 31:10:
+    head_id = batch_head_id % num_heads
+
+    num_blocks_m = tl.cdiv(seq_len, block_m)
+    block_m_id = block_id % num_blocks_m
+
+    # Scaling factor
+    scale = 1.0 / tl.sqrt(head_dim * 1.0)
+
+    # Initialize accumulators
+    m_i = tl.full([block_m], value=float('-inf'), dtype=tl.float32)
+    l_i = tl.zeros([block_m], dtype=tl.float32)
+    acc = tl.zeros([block_m, head_dim], dtype=tl.float32)
+          ^

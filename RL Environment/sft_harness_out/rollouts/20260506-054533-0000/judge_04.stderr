@@ -1,0 +1,40 @@
+/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/graph.py:825: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at ../aten/src/ATen/cuda/CublasHandlePool.cpp:135.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 432, in <module>
+    main()
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 281, in main
+    out_agent = FlashAttention.apply(q_agent, k_agent, v_agent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/sft_harness_out/rollouts/20260506-054533-0000/turn_04.py", line 270, in forward
+    flash_attention_forward_kernel[grid](
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 345, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 662, in run
+    kernel = self.compile(
+             ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 276, in compile
+    module = src.make_ir(options, codegen_fns, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 113, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 90:28:
+        acc = tl.exp(m_i - m_new)[:, None] * acc + tl.dot(p, v)
+
+        # Update m_i
+        m_i = m_new
+
+    # Normalize output: O = acc / l_i
+    out = acc / l_i[:, None]
+
+    # Store outputs
+    o_ptrs = Out + o_offset + tl.arange(0, BLOCK_M)[:, None] * stride_os + tl.arange(0, BLOCK_D)[None, :] * stride_od
+    o_mask = (block_m * BLOCK_M + tl.arange(0, BLOCK_M)[:, None]) < N_CTX
+    tl.store(o_ptrs, out.to(Out.dtype.element_type), mask=o_mask)
+                            ^
+AttributeError("'pointer_type' object has no attribute 'element_type'")

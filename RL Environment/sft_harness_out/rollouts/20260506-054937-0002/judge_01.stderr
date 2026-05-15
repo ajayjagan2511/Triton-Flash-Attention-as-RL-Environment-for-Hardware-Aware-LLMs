@@ -1,0 +1,70 @@
+/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/graph.py:825: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at ../aten/src/ATen/cuda/CublasHandlePool.cpp:135.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 432, in <module>
+    main()
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 281, in main
+    out_agent = FlashAttention.apply(q_agent, k_agent, v_agent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/sft_harness_out/rollouts/20260506-054937-0002/turn_01.py", line 235, in forward
+    flash_attention_forward_kernel[grid](
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 345, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 662, in run
+    kernel = self.compile(
+             ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 240, in compile
+    key = f"{triton_key()}-{src.hash()}-{backend.hash()}-{options.hash()}-{str(sorted(env_vars.items()))}"
+                            ^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 109, in hash
+    key = f"{self.fn.cache_key}-{self.attrs.hash()}-{sorted_sig}-{sorted_constants}"
+             ^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 758, in cache_key
+    dependencies_finder.visit(self.parse())
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 415, in generic_visit
+    self.visit(item)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 167, in visit_FunctionDef
+    self.generic_visit(node)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 415, in generic_visit
+    self.visit(item)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 233, in visit_For
+    self.generic_visit(node)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 415, in generic_visit
+    self.visit(item)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 221, in visit_Assign
+    self.generic_visit(node)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 417, in generic_visit
+    self.visit(value)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 417, in generic_visit
+    self.visit(value)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 417, in generic_visit
+    self.visit(value)
+  File "/root/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/ast.py", line 407, in visit
+    return visitor(node)
+           ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 128, in visit_Call
+    assert func is None or is_triton_builtin(func) or isinstance(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Function "sqrt" is being called from a Triton function but is not a Triton function itself. Decorate it with @triton.jit to fix this

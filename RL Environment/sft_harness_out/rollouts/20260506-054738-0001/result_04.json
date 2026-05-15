@@ -1,0 +1,1 @@
+{"score": 0.1, "metadata": {"error": "forward_failed", "detail": "Tensor-likes are not close!\n\nMismatched elements: 256020 / 262144 (97.7%)\nGreatest absolute difference: 3.509765625 at index (1, 1, 0, 30) (up to 0.001 allowed)\nGreatest relative difference: inf at index (0, 2, 10, 24) (up to 0.001 allowed)", "stages": {"static": true, "import": true}, "seq_len": 512}}

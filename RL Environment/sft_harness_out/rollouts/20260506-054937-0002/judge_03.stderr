@@ -1,0 +1,55 @@
+/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/graph.py:825: UserWarning: Attempting to run cuBLAS, but there was no current CUDA context! Attempting to set the primary context... (Triggered internally at ../aten/src/ATen/cuda/CublasHandlePool.cpp:135.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 35, in wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/core.py", line 1534, in dot
+    return semantic.dot(input, other, acc, input_precision, max_num_imprecise_acc, out_dtype, _builder)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/semantic.py", line 1355, in dot
+    assert_dtypes_valid(lhs.dtype, rhs.dtype, builder.options)
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/language/semantic.py", line 1328, in assert_dtypes_valid
+    assert lhs_dtype == rhs_dtype, f"First input ({lhs_dtype}) and second input ({rhs_dtype}) must have the same dtype!"
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: First input (fp32) and second input (fp16) must have the same dtype!
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 432, in <module>
+    main()
+  File "/ajay_jagannath_pm_env_slim/src/pm_env/score_flash_attention.py", line 281, in main
+    out_agent = FlashAttention.apply(q_agent, k_agent, v_agent)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/sft_harness_out/rollouts/20260506-054937-0002/turn_03.py", line 240, in forward
+    flash_attention_forward_kernel[grid](
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 345, in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/runtime/jit.py", line 662, in run
+    kernel = self.compile(
+             ^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 276, in compile
+    module = src.make_ir(options, codegen_fns, context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ajay_jagannath_pm_env_slim/.venv/lib/python3.12/site-packages/triton/compiler/compiler.py", line 113, in make_ir
+    return ast_to_ttir(self.fn, self, context=context, options=options, codegen_fns=codegen_fns)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+triton.compiler.errors.CompilationError: at 73:57:
+        m_ij = tl.max(s, axis=1)
+        m_i_new = tl.maximum(m_i, m_ij)
+
+        # Compute exp(s - m_i_new)
+        p = tl.exp(s - m_i_new[:, None])
+
+        # Compute l_i update
+        l_ij = tl.sum(p, axis=1)
+        l_i_new = tl.exp(m_i - m_i_new) * l_i + l_ij
+
+        # Update accumulator
+        acc_new = tl.exp(m_i - m_i_new)[:, None] * acc + tl.dot(p, v)
+                                                         ^
